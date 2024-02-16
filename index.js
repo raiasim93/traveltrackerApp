@@ -49,8 +49,10 @@ app.get("/", async(req, res)=> {
 app.post("/add", async (req,res)=> {
     const input = req.body["country"];
     try {
-        const result = await db.query("SELECT country_code FROM countries WHERE country_name = $1",
-    [input]);
+        const result = await db.query(
+            "SELECT country_code FROM countries WHERE LOWER(country_name) LIKE '%' || $1 || '%' ",
+    [input.toLowerCase()]
+    );
     
     // checking is not required as it is already in try catch block, any error will result into catch blockx
     // if(result.rows.length !== 0){
